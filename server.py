@@ -4,6 +4,10 @@ from board import Board
 import pickle
 import time
 
+BUFFER_SIZE = 8192 * 3
+BUFFER_SIZE_2 = 128
+START_TIME_IN_SECONDS = 900
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 server = "localhost"
@@ -69,7 +73,7 @@ def threaded_client(conn, game, spec=False):
                 break
 
             try:
-                d = conn.recv(8192 * 3)
+                d = conn.recv(BUFFER_SIZE)
                 data = d.decode("utf-8")
                 if not d:
                     break
@@ -102,9 +106,9 @@ def threaded_client(conn, game, spec=False):
 
                     if bo.ready:
                         if bo.turn == "w":
-                            bo.time1 = 900 - (time.time() - bo.startTime) - bo.storedTime1
+                            bo.time1 = START_TIME_IN_SECONDS - (time.time() - bo.startTime) - bo.storedTime1
                         else:
-                            bo.time2 = 900 - (time.time() - bo.startTime) - bo.storedTime2
+                            bo.time2 = START_TIME_IN_SECONDS - (time.time() - bo.startTime) - bo.storedTime2
 
                     sendData = pickle.dumps(bo)
                     #print("Sending board to player", currentId, "in game", game)
@@ -135,7 +139,7 @@ def threaded_client(conn, game, spec=False):
             available_games = list(games.keys())
             bo = games[available_games[game_ind]]
             try:
-                d = conn.recv(128)
+                d = conn.recv(BUFFER_SIZE_2)
                 data = d.decode("utf-8")
                 if not d:
                     break

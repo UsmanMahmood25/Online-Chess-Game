@@ -43,9 +43,20 @@ from client import Network
 import pickle
 pygame.font.init()
 
-board = pygame.transform.scale(pygame.image.load(os.path.join("img","board_alt.png")), (750, 750))
+RECTANGLE_X = 113
+RECTANGLE_Y = 113
+RECTANGLE_HEIGHT = 525
+RECTANGLE_WIDTH = 525
+SMALL_FONT_SIZE = 30
+MEDIUM_FONT_SIZE = 50
+LARGE_FONT_SIZE = 80
+BOARD_WIDTH = 750
+BOARD_LENGTH = 750
+BOARD_SIZE = 8
+
+board = pygame.transform.scale(pygame.image.load(os.path.join("img","board_alt.png")), (BOARD_WIDTH, BOARD_LENGTH))
 chessbg = pygame.image.load(os.path.join("img", "chessbg.png"))
-rect = (113,113,525,525)
+rect = (RECTANGLE_X, RECTANGLE_Y, RECTANGLE_WIDTH, RECTANGLE_HEIGHT)
 
 turn = "w"
 
@@ -57,7 +68,7 @@ def menu_screen(win, name):
 
     while run:
         win.blit(chessbg, (0,0))
-        small_font = pygame.font.SysFont("comicsans", 50)
+        small_font = pygame.font.SysFont("comicsans", MEDIUM_FONT_SIZE)
         
         if offline:
             off = small_font.render("Server Offline, Try Again Later...", 1, (255, 0, 0))
@@ -94,7 +105,7 @@ def redraw_gameWindow(win, bo, p1, p2, color, ready):
     if int(p2%60) < 10:
         formatTime2 = formatTime2[:-1] + "0" + formatTime2[-1]
 
-    font = pygame.font.SysFont("comicsans", 30)
+    font = pygame.font.SysFont("comicsans", SMALL_FONT_SIZE)
     try:
         txt = font.render(bo.p1Name + "\'s Time: " + str(formatTime2), 1, (255, 255, 255))
         txt2 = font.render(bo.p2Name + "\'s Time: " + str(formatTime1), 1, (255,255,255))
@@ -114,12 +125,12 @@ def redraw_gameWindow(win, bo, p1, p2, color, ready):
         show = "Waiting for Player"
         if color == "s":
             show = "Waiting for Players"
-        font = pygame.font.SysFont("comicsans", 80)
+        font = pygame.font.SysFont("comicsans", LARGE_FONT_SIZE)
         txt = font.render(show, 1, (255, 0, 0))
         win.blit(txt, (width/2 - txt.get_width()/2, 300))
 
     if not color == "s":
-        font = pygame.font.SysFont("comicsans", 30)
+        font = pygame.font.SysFont("comicsans", SMALL_FONT_SIZE)
         if color == "w":
             txt3 = font.render("YOU ARE WHITE", 1, (255, 0, 0))
             win.blit(txt3, (width / 2 - txt3.get_width() / 2, 10))
@@ -139,7 +150,7 @@ def redraw_gameWindow(win, bo, p1, p2, color, ready):
 
 def end_screen(win, text):
     pygame.font.init()
-    font = pygame.font.SysFont("comicsans", 80)
+    font = pygame.font.SysFont("comicsans", LARGE_FONT_SIZE)
     txt = font.render(text,1, (255,0,0))
     win.blit(txt, (width / 2 - txt.get_width() / 2, 300))
     pygame.display.update()
@@ -169,8 +180,8 @@ def click(pos):
         if rect[1] < y < rect[1] + rect[3]:
             divX = x - rect[0]
             divY = y - rect[1]
-            i = int(divX / (rect[2]/8))
-            j = int(divY / (rect[3]/8))
+            i = int(divX / (rect[2]/BOARD_SIZE))
+            j = int(divY / (rect[3]/BOARD_SIZE))
             return i, j
 
     return -1, -1
@@ -264,8 +275,8 @@ def main():
 
 
 name = input("Please type your name: ")
-width = 750
-height = 750
+width = BOARD_WIDTH
+height = BOARD_LENGTH
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Chess Game")
 menu_screen(win, name)
