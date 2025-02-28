@@ -7,7 +7,7 @@ import time
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 server = "localhost"
-port = 5555
+port = 5000
 
 server_ip = socket.gethostbyname(server)
 
