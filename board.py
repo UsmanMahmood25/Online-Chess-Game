@@ -119,8 +119,7 @@ class Board:
             for j in range(self.cols):
                 if self.board[i][j] != 0:
                     if self.board[i][j].color != color:
-                        for move in self.board[i][j].move_list:
-                            danger_moves.append(move)
+                        danger_moves.extend(self.board[i][j].move_list)
 
         return danger_moves
 
