@@ -14,7 +14,7 @@ def install(package):
 try:
     print("[GAME] Trying to import pygame")
     import pygame
-except:
+except ImportError:
     print("[EXCEPTION] Pygame not installed")
 
     try:
@@ -22,18 +22,21 @@ except:
         import pip
         install("pygame")
         print("[GAME] Pygame has been installed")
-    except:
+    except ImportError:
         print("[EXCEPTION] Pip not installed on system")
         print("[GAME] Trying to install pip")
-        get_pip.main()
-        print("[GAME] Pip has been installed")
         try:
-            print("[GAME] Trying to install pygame")
-            import pip
-            install("pygame")
-            print("[GAME] Pygame has been installed")
-        except:
-            print("[ERROR 1] Pygame could not be installed")
+            get_pip.main()
+            print("[GAME] Pip has been installed")
+            try:
+                print("[GAME] Trying to install pygame")
+                import pip
+                install("pygame")
+                print("[GAME] Pygame has been installed")
+            except ImportError:
+                print("[ERROR 1] Pygame could not be installed")
+        except Exception as e:
+            print(f"[ERROR 2] Pip could not be installed: {e}")
 
 
 import pygame
@@ -88,7 +91,8 @@ def menu_screen(win, name):
                     run = False
                     main()
                     break
-                except:
+                except Exception as e: 
+                    print(e)
                     print("Server Offline")
                     offline = True
 
